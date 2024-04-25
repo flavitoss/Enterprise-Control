@@ -38,15 +38,16 @@ public class Program {
         System.out.println("Inserted! new id: " + newSeller.getId());
 
         System.out.println("\n=== TEST 5: seller update ===");
-        
+
         seller = sellerDao.findById(1);
         seller.setName("Martha Wayne");
         sellerDao.update(seller);
         System.out.println("Updated! id: " + seller.getId());
 
+        System.out.println("\n=== TEST 6: seller delete ===");
 
-
-
+        sellerDao.deleteById(10);
+        System.out.println("Deleted!");
 
     }
 }
