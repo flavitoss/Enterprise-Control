@@ -2,6 +2,7 @@ package model.dao.impl;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
 
@@ -88,7 +89,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
         } catch (Exception e) {
 
-            throw new DbException(e.getMessage());
+            throw new DbIntegrityException(e.getMessage());
         }
         finally {
 
@@ -102,13 +103,15 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            ps = conn.prepareStatement("SELECT from department WHERE Id=?");
+            ps = conn.prepareStatement("SELECT * from department WHERE Id=?");
             ps.setInt(1,id);
             rs = ps.executeQuery();
 
             if (rs.next()){
 
                 Department obj = instantiateDepartment(rs);
+                obj.setId(rs.getInt("Id"));
+                obj.setName(rs.getString("Name"));
                 return obj;
             }
             return null;
@@ -163,8 +166,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     private Department instantiateDepartment(ResultSet rs) throws SQLException {
         Department dep = new Department();
-        dep.setId(rs.getInt("DepartmentId"));
-        dep.setName(rs.getString("DepName"));
+        dep.setId(rs.getInt("Id"));
+        dep.setName(rs.getString("Name"));
 
         return dep;
 
